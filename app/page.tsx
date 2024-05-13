@@ -10,6 +10,8 @@ export default function Home() {
 
   const [book, setBook] = useState<string>("");
 
+  const [counter, setCounter] = useState<number>(0);
+
   const [books, setBooks] = useState<BookModel[]>([]);
 
 
@@ -25,7 +27,12 @@ export default function Home() {
   }
 
   const handleComplete = (id: string) => {
+    // This is the set books, you map, and you have to return this array back too, which is why if your id matches, then you spread the rest of the book, and return with the id opposite to original id. If not then you return the book as it is. 
     setBooks(books.map(b => b.id === id ? { ...b, completed: !b.completed } : b));
+
+    //  this is interesting af. Why is this the way that false pe you increase counter? This is because it takes time for the setbooks to get completed, during which this runs, so we are not talking about the anticipated state, but the current state. 
+    const currBook = books.find((b) => b.id === id);
+    currBook?.completed === false ? setCounter(counter + 1) : setCounter(counter - 1);
   }
 
 
@@ -33,6 +40,10 @@ export default function Home() {
 
   return (
     <>
+
+      <div className="md:mx-auto p-4 md:w-[70%] rounded-xl  m-4 flex flex-col justify-start items-center">
+        No of books completed so far: <span>{counter}</span>
+      </div>
       <section className="md:mx-auto p-4 md:w-[70%] bg-[#638889] rounded-xl border-[3px] border-[#9DBC98] m-4 h-[70vh] flex flex-col justify-start items-center">
 
         <form onSubmit={(e => handleSubmit(e))}>
