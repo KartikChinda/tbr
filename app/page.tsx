@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormEvent } from "react";
 import { v4 as uuid } from 'uuid';
 import BookModel from "./models/Book";
@@ -10,29 +10,52 @@ export default function Home() {
 
   const [book, setBook] = useState<string>("");
 
-  const [counter, setCounter] = useState<number>(0);
+  const [counter, setCounter] = useState<number>(() => {
+    const newCounter = localStorage.getItem("counter") || "0";
+    const finalCount = JSON.parse(newCounter)
+    if (localStorage.getItem("counter") === null) {
+      return finalCount;
+    }
+    return finalCount + 1;
+  });
 
-  const [books, setBooks] = useState<BookModel[]>([]);
+  const [books, setBooks] = useState<BookModel[]>(() => {
+    const newBooks = localStorage.getItem("storeBooks") || "[]";
+    return JSON.parse(newBooks);
+  });
 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    setBooks([{ title: book, id: uuid(), completed: false }, ...books]);
-    console.log(books)
+    const currBook: BookModel = { title: book, id: uuid(), completed: false }
+    setBooks([currBook, ...books]);
     setBook("");
+    localStorage.setItem("storeBooks", JSON.stringify([currBook, ...books]));
   }
 
-  const handleDelete = (id: string): void => {
-    setBooks(books.filter((b) => b.id !== id));
+  const handleDelete = (id: string) => {
+
+    setBooks(books.filter((b) => b.id !== id))
+    const delBooks = books.filter((b) => b.id !== id)
+
+    localStorage.setItem("storeBooks", JSON.stringify(delBooks))
+
   }
 
   const handleComplete = (id: string) => {
     // This is the set books, you map, and you have to return this array back too, which is why if your id matches, then you spread the rest of the book, and return with the id opposite to original id. If not then you return the book as it is. 
     setBooks(books.map(b => b.id === id ? { ...b, completed: !b.completed } : b));
+    const delBooks = books.map(b => b.id === id ? { ...b, completed: !b.completed } : b)
+
+    localStorage.setItem("storeBooks", JSON.stringify(delBooks))
 
     //  this is interesting af. Why is this the way that false pe you increase counter? This is because it takes time for the setbooks to get completed, during which this runs, so we are not talking about the anticipated state, but the current state. 
     const currBook = books.find((b) => b.id === id);
     currBook?.completed === false ? setCounter(counter + 1) : setCounter(counter - 1);
+
+    localStorage.setItem("counter", JSON.stringify(counter));
+
+
   }
 
 
