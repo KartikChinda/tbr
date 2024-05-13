@@ -35,8 +35,9 @@ export default function Home() {
 
   const handleDelete = (id: string) => {
 
-    setBooks(books.filter((b) => b.id !== id))
+
     const delBooks = books.filter((b) => b.id !== id)
+    setBooks(delBooks)
 
     localStorage.setItem("storeBooks", JSON.stringify(delBooks))
 
@@ -44,8 +45,8 @@ export default function Home() {
 
   const handleComplete = (id: string) => {
     // This is the set books, you map, and you have to return this array back too, which is why if your id matches, then you spread the rest of the book, and return with the id opposite to original id. If not then you return the book as it is. 
-    setBooks(books.map(b => b.id === id ? { ...b, completed: !b.completed } : b));
     const delBooks = books.map(b => b.id === id ? { ...b, completed: !b.completed } : b)
+    setBooks(delBooks);
 
     localStorage.setItem("storeBooks", JSON.stringify(delBooks))
 
