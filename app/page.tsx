@@ -41,10 +41,10 @@ export default function Home() {
   return (
     <>
 
-      <div className="md:mx-auto p-4 md:w-[70%] rounded-xl  m-4 flex flex-col justify-start items-center">
-        No of books completed so far: <span>{counter}</span>
+      <div className="md:mx-auto p-4 md:w-[70%] rounded-xl  m-4 flex flex-col justify-start items-center text-[#638889] font-bold">
+        Books read so far: <span className="text-8xl hover:-skew-x-6">{counter}</span>
       </div>
-      <section className="md:mx-auto p-4 md:w-[70%] bg-[#638889] rounded-xl border-[3px] border-[#9DBC98] m-4 h-[70vh] flex flex-col justify-start items-center">
+      <section className="md:mx-auto p-4 md:w-[70%] bg-[#638889] rounded-xl border-[3px] border-[#9DBC98] m-4  min-h-[60vh]  flex flex-col justify-start items-center">
 
         <form onSubmit={(e => handleSubmit(e))}>
           <div className="flex flex-row items-center justify-center">
